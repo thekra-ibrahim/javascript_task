@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 0 20px;
+      }
+      h1,
+      h2 {
+        text-align: center;
+      }
+      .input-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      #taskInput {
+        padding: 10px;
+        font-size: 16px;
+      }
+      #addTaskBtn {
+        padding: 10px;
+        background-color: #008cba;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      #addTaskBtn:hover {
+        background-color: #008cba;
+      }
+      #validationMsg {
+        color: red;
+        font-size: 14px;
+        display: none;
+      }
+      .filter-buttons {
+        display: flex;
+        width: 100%;
+      }
+
+      .filter-buttons button {
+        flex: 1; 
+        padding: 10px;
+        margin: 0; 
+        border: 1px solid #ccc;
+        background-color: #008cba;
+      }
+
+      .filter-btn {
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        cursor: pointer;
+        background-color: blue;
+      }
+      .filter-btn.active {
+        background-color: blue;
+        color: white;
+      }
+      .task-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        gap: 10px;
+      }
+      .task-item.done {
+        color: red;
+        text-decoration: line-through;
+      }
+      .task-text {
+        flex-grow: 1;
+      }
+      .task-actions button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+      }
+      .bottom-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+      #deleteDoneBtn {
+        padding: 10px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      #deleteAllBtn {
+        padding: 10px;
+        background-color: #a71d2a;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        width: 300px;
+      }
+      .modal-content input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+      .modal-content button {
+        padding: 8px 16px;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>TodoInput</h1>
+    <div class="input-section">
+      <input type="text" id="taskInput" placeholder="Enter a new task" />
+      <span id="validationMsg">Task must be at least 5 characters long</span>
+      <button id="addTaskBtn">Add new task</button>
+    </div>
+
+    <h2>Todo List</h2>
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="done">Done</button>
+      <button class="filter-btn" data-filter="todo">Todo</button>
+    </div>
+
+    <ul id="taskList"></ul>
+
+    <div class="bottom-buttons">
+      <button id="deleteDoneBtn">Delete Done Tasks</button>
+      <button id="deleteAllBtn">Delete All Tasks</button>
+    </div>
+
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <h3>Edit Task</h3>
+        <input type="text" id="editTaskInput" />
+        <button id="saveEditBtn">Save</button>
+        <button id="cancelEditBtn">Cancel</button>
+      </div>
+    </div>
+
+    <div id="confirmDeleteModal" class="modal">
+      <div class="modal-content">
+        <h3>Confirm Deletion</h3>
+        <p>Are you sure you want to delete all tasks?</p>
+        <button id="confirmDeleteBtn">Yes</button>
+        <button id="cancelDeleteBtn">No</button>
+      </div>
+    </div>
+
+   
+  </body>
+</html>
