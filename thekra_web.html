@@ -282,10 +282,7 @@
         tasks = tasks.map((task) =>
           task.id === editingTaskId ? { ...task, text } : task
         );
-        // Sort tasks alphabetically after editing
-        tasks.sort((a, b) => a.text.localeCompare(b.text, undefined, { sensitivity: 'base' }));
-        closeEditModal();
-        renderTasks();
+       
       }
 
       // Close edit modal
