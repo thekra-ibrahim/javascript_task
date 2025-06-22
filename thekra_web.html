@@ -332,7 +332,9 @@
       saveEditBtn.addEventListener("click", saveEdit);
       cancelEditBtn.addEventListener("click", closeEditModal);
       confirmDeleteBtn.addEventListener("click", deleteAllTasks);
-     
+      cancelDeleteBtn.addEventListener("click", () => {
+        confirmDeleteModal.style.display = "none";
+      });
 
       // Initial render
       renderTasks();
