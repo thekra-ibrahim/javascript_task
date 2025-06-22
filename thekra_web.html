@@ -274,11 +274,7 @@
 
       // Save edited task
       function saveEdit() {
-        const text = editTaskInput.value.trim();
-        if (text.length < 5) {
-          alert("Task must be at least 5 characters long");
-          return;
-        }
+     
         tasks = tasks.map((task) =>
           task.id === editingTaskId ? { ...task, text } : task
         );
