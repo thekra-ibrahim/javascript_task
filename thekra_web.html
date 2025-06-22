@@ -312,11 +312,7 @@
         confirmDeleteModal.style.display = "none";
       }
 
-      // Event listeners
-      addTaskBtn.addEventListener("click", addTask);
-      taskInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") addTask();
-      });
+    
 
       filterButtons.forEach((button) => {
         button.addEventListener("click", () => {
