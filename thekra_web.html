@@ -264,7 +264,13 @@
         renderTasks();
       }
 
-     
+      // Open edit modal
+      function openEditModal(id) {
+        editingTaskId = id;
+        const task = tasks.find((task) => task.id === id);
+        editTaskInput.value = task.text;
+        editModal.style.display = "flex";
+      }
 
       // Save edited task
       function saveEdit() {
