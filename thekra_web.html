@@ -294,6 +294,11 @@
         editingTaskId = null;
       }
 
+      // Delete done tasks
+      function deleteDoneTasks() {
+        tasks = tasks.filter((task) => !task.done);
+        renderTasks();
+      }
 
       // Open delete all confirmation
       function openDeleteAllModal() {
