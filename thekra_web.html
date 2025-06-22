@@ -288,7 +288,11 @@
         renderTasks();
       }
 
-      
+      // Close edit modal
+      function closeEditModal() {
+        editModal.style.display = "none";
+        editingTaskId = null;
+      }
 
       // Delete done tasks
       function deleteDoneTasks() {
