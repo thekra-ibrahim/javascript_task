@@ -79,6 +79,9 @@
       .task-text {
         flex-grow: 1;
       }
+      .letter-prefix {
+        margin-right: 10px; /* Add spacing between letter and task text */
+      }
       .task-actions button {
         background: none;
         border: none;
@@ -172,6 +175,169 @@
       </div>
     </div>
 
-   
+    <script>
+      // Task management
+      let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      let currentFilter = "all";
+      let editingTaskId = null;
+
+      // DOM elements
+      const taskInput = document.getElementById("taskInput");
+      const validationMsg = document.getElementById("validationMsg");
+      const addTaskBtn = document.getElementById("addTaskBtn");
+      const taskList = document.getElementById("taskList");
+      const filterButtons = document.querySelectorAll(".filter-btn");
+      const deleteDoneBtn = document.getElementById("deleteDoneBtn");
+      const deleteAllBtn = document.getElementById("deleteAllBtn");
+      const editModal = document.getElementById("editModal");
+      const editTaskInput = document.getElementById("editTaskInput");
+      const saveEditBtn = document.getElementById("saveEditBtn");
+      const cancelEditBtn = document.getElementById("cancelEditBtn");
+      const confirmDeleteModal = document.getElementById("confirmDeleteModal");
+      const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+      const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+
+      // Render tasks
+      function renderTasks() {
+        taskList.innerHTML = "";
+        const filteredTasks = tasks.filter((task) => {
+          if (currentFilter === "all") return true;
+          if (currentFilter === "done") return task.done;
+          if (currentFilter === "todo") return !task.done;
+        });
+
+        filteredTasks.forEach((task, index) => {
+          const li = document.createElement("li");
+          li.className = `task-item ${task.done ? "done" : ""}`;
+          // Generate a single lowercase letter based on task index (a for 0, b for 1, etc.)
+          const letter = String.fromCharCode(97 + index).toLowerCase(); // 97 is ASCII for 'a'
+          li.innerHTML = `
+                    <span class="task-text"><span class="letter-prefix">${letter}</span> ${task.text}</span>
+                    <div class="task-actions">
+                        <input type="checkbox" ${
+                          task.done ? "checked" : ""
+                        } onchange="toggleTask(${task.id})">
+                        <button onclick="openEditModal(${task.id})">✏️</button>
+                        <button onclick="deleteTask(${task.id})">🗑️</button>
+                    </div>
+                `;
+          taskList.appendChild(li);
+        });
+        saveTasks();
+      }
+
+      // Save tasks to localStorage
+      function saveTasks() {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+
+      // Add new task
+      function addTask() {
+        const text = taskInput.value.trim();
+        if (text.length < 5) {
+          validationMsg.style.display = "block";
+          return;
+        }
+        validationMsg.style.display = "none";
+        tasks.push({
+          id: Date.now(),
+          text: text,
+          done: false,
+        });
+        // Sort tasks alphabetically by text (case-insensitive)
+        tasks.sort((a, b) => a.text.localeCompare(b.text, undefined, { sensitivity: 'base' }));
+        taskInput.value = "";
+        renderTasks();
+      }
+
+      // Toggle task status
+      function toggleTask(id) {
+        tasks = tasks.map((task) =>
+          task.id === id ? { ...task, done: !task.done } : task
+        );
+        renderTasks();
+      }
+
+      // Delete task
+      function deleteTask(id) {
+        tasks = tasks.filter((task) => task.id !== id);
+        renderTasks();
+      }
+
+      // Open edit modal
+      function openEditModal(id) {
+        editingTaskId = id;
+        const task = tasks.find((task) => task.id === id);
+        editTaskInput.value = task.text;
+        editModal.style.display = "flex";
+      }
+
+      // Save edited task
+      function saveEdit() {
+        const text = editTaskInput.value.trim();
+        if (text.length < 5) {
+          alert("Task must be at least 5 characters long");
+          return;
+        }
+        tasks = tasks.map((task) =>
+          task.id === editingTaskId ? { ...task, text } : task
+        );
+        // Sort tasks alphabetically after editing
+        tasks.sort((a, b) => a.text.localeCompare(b.text, undefined, { sensitivity: 'base' }));
+        closeEditModal();
+        renderTasks();
+      }
+
+      // Close edit modal
+      function closeEditModal() {
+        editModal.style.display = "none";
+        editingTaskId = null;
+      }
+
+      // Delete done tasks
+      function deleteDoneTasks() {
+        tasks = tasks.filter((task) => !task.done);
+        renderTasks();
+      }
+
+      // Open delete all confirmation
+      function openDeleteAllModal() {
+        confirmDeleteModal.style.display = "flex";
+      }
+
+      // Delete all tasks
+      function deleteAllTasks() {
+        tasks = [];
+        renderTasks();
+        confirmDeleteModal.style.display = "none";
+      }
+
+      // Event listeners
+      addTaskBtn.addEventListener("click", addTask);
+      taskInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") addTask();
+      });
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          currentFilter = button.dataset.filter;
+          renderTasks();
+        });
+      });
+
+      deleteDoneBtn.addEventListener("click", deleteDoneTasks);
+      deleteAllBtn.addEventListener("click", openDeleteAllModal);
+      saveEditBtn.addEventListener("click", saveEdit);
+      cancelEditBtn.addEventListener("click", closeEditModal);
+      confirmDeleteBtn.addEventListener("click", deleteAllTasks);
+      cancelDeleteBtn.addEventListener("click", () => {
+        confirmDeleteModal.style.display = "none";
+      });
+
+      // Initial render
+      renderTasks();
+    </script>
   </body>
 </html>
