@@ -318,7 +318,14 @@
         if (e.key === "Enter") addTask();
       });
 
-   
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          currentFilter = button.dataset.filter;
+          renderTasks();
+        });
+      });
 
       deleteDoneBtn.addEventListener("click", deleteDoneTasks);
       deleteAllBtn.addEventListener("click", openDeleteAllModal);
